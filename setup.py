@@ -10,15 +10,14 @@ setuptools.setup(
     packages=['Flansible',
               'Flansible.Examples',
               'Flansible.Utils',
-              'Flansible.flansible',
-              'playbook'],
+              'Flansible.flansible'
+              ],
     include_package_data=True,
     package_data={
         'Flansible': ['*.*'],
         'Flansible.Examples': ['*.*'],
         'Flansible.Utils': ['*.*'],
         'Flansible.flansible': ['*.*'],
-        'playbook': ['*.*']
     },
     install_requires=[
         'celery==4.0.0',
