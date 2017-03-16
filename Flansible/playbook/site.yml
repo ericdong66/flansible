@@ -19,6 +19,8 @@
        path: /usr/local/lib/python2.7/dist-packages/Flansible
       register: flansible_is_installed
 
+    - debug: var=flansible_is_installed
+
     - name: symlink flansible dir
       become: yes
       file:
