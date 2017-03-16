@@ -19,8 +19,6 @@
        path: /usr/local/lib/python2.7/dist-packages/Flansible
       register: flansible_is_installed
 
-    - debug: var=flansible_is_installed
-
     - name: symlink flansible dir
       become: yes
       file:
@@ -29,7 +27,7 @@
         owner: flansible
         group: flansible
         state: link
-      when: flansible_is_installed.stat is defined
+      when: flansible_is_installed.stat.exists == true
 
     - name: Configure wsgi file
       become: yes
