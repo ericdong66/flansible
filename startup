@@ -3,7 +3,7 @@
 flansible_prod_dir="/usr/local/lib/python2.7/dist-packages/Flansible"
 flansible_dev_dir="/home/flansible/Flansible"
 
-/usr/sbin/sshd -D
+/usr/sbin/sshd -D &
 
 if [[ -z "${flansible_prod_dir}" ]]
   then
@@ -15,7 +15,5 @@ fi
 cd /home/flansible/Flansible
 C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info > /var/log/celery.log 2>&1 &
 flower --broker=redis://localhost:6379/0 > /var/log/flower.log 2>&1 &
-python runserver.py > /var/log/flansible.log 2>&1 &
-
-/bin/bash
+python runserver.py > /var/log/flansible.log 2>&1
 
