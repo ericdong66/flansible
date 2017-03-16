@@ -162,16 +162,10 @@ The output from this call should resemble what you see in bash when executing An
 ### how it works in docker
 
 for dev:
-
 vagrant ssh
 docker-compose  -f docker-compose.yml build
 docker-compose  -f docker-compose.yml up -d
 sudo docker exec -it vagrant_flansible_1 bash
-ansible-playbook  /home/flansible/playbook/site-docker.yml
-
-cd /home/flansible/Flansible; python runserver.py
-cd /home/flansible/Flansible; C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info
-flower --broker=redis://localhost:6379/0
 
 
 for prod:

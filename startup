@@ -9,7 +9,7 @@ if [[ "${site_yml}" ]]
   then
     ansible-playbook site_yml -vvv &> /var/log/flansible-setup.log
   else
-    ansible-playbook ${flansible_dev_dir}/Flansible/playbook/site.yml -vvv &> /var/log/flansible-setup.log
+    ansible-playbook ${flansible_home}/Flansible/playbook/site.yml -vvv &> /var/log/flansible-setup.log
 fi
 
 cd /home/flansible/Flansible
