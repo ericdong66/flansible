@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  connection: local
   tasks:
     - name: Make sure target dir exists
       become: yes
@@ -11,18 +12,7 @@
       become: yes
       user:
         name: flansible
-
-    - name: Make sure target dir exists
-      become: yes
-      file:
-        path: /home/flansible
-        state: directory
-
-    - name: Clone Flansible
-      become: yes
-      git:
-        repo: https://github.com/ericdong66/flansible.git
-        dest: /home/flansible
+        uid: 1000
 
     - name: Configure wsgi file
       become: yes
@@ -35,8 +25,6 @@
       apache2_module:
         state: present
         name: wsgi
-      notify:
-        - restart apache
 
     - name: make wsgi executable
       become: yes
@@ -45,21 +33,27 @@
         entity: flansible
         etype: user
         permissions: "rwx"
-      notify:
-        - restart apache
 
     - name: Configure apache app file
       become: yes
       template:
         src: site.xml
         dest: /etc/apache2/sites-available/flansible.conf
-      notify:
-        - restart apache
 
-  handlers:
     - name: restart apache
       become: yes
       service:
         name: apache2
         state: restarted
 
+    - name: restart redis
+      become: yes
+      service:
+        name: redis-server
+        state: restarted
+
+    - name: restart ssh
+      become: yes
+      service:
+        name: ssh
+        state: restarted
