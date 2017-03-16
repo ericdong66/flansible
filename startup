@@ -1,19 +1,18 @@
 #!/bin/bash
 
-flansible_prod_dir="/usr/local/lib/python2.7/dist-packages/Flansible"
-flansible_dev_dir="/home/flansible/Flansible"
-
 /usr/sbin/sshd -D &
 
-if [[ -z "${flansible_prod_dir}" ]]
+site_yml=$(flansible)
+flansible_home="/home/flansible/"
+
+if [[ "${site_yml}" ]]
   then
-    ansible-playbook ${flansible_install_dir}/playbook/site.yml -vvv > /var/log/flansible-setup.log 2>&1
+    ansible-playbook site_yml -vvv &> /var/log/flansible-setup.log
   else
-    ansible-playbook ${flansible_dev_dir}/playbook/site.yml -vvv > /var/log/flansible-setup.log 2>&1
+    ansible-playbook ${flansible_dev_dir}/Flansible/playbook/site.yml -vvv &> /var/log/flansible-setup.log
 fi
 
 cd /home/flansible/Flansible
-C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info > /var/log/celery.log 2>&1 &
+C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info &> /var/log/celery.log &
 flower --broker=redis://localhost:6379/0 > /var/log/flower.log 2>&1 &
-python runserver.py > /var/log/flansible.log 2>&1
-
+python runserver.py &> /var/log/flansible.log

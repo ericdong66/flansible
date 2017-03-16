@@ -43,7 +43,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'flansible = Flansible.runserver:main'
+            'flansible = Flansible.playbook:site'
         ]
     }
 )
