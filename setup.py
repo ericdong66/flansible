@@ -11,7 +11,8 @@ setuptools.setup(
               'Flansible.Examples',
               'Flansible.Utils',
               'Flansible.flansible',
-              'Flansible.playbook'
+              'Flansible.playbook',
+              'Flansible.playbook.templates'
               ],
     include_package_data=True,
     package_data={
@@ -20,6 +21,7 @@ setuptools.setup(
         'Flansible.Utils': ['*.*'],
         'Flansible.flansible': ['*.*'],
         'Flansible.playbook': ['*.*'],
+        'Flansible.playbook.templates': ['*.*'],
     },
     install_requires=[
         'celery==4.0.0',

@@ -1,4 +1,4 @@
-flansible-dev:
+flansible:
   build: .
   dockerfile: Dockerfile-dev
   ports:
