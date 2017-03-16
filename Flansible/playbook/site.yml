@@ -68,9 +68,3 @@
       service:
         name: redis-server
         state: restarted
-
-    - name: restart ssh
-      become: yes
-      service:
-        name: ssh
-        state: restarted
