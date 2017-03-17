@@ -1,5 +1,8 @@
-#Flansible
+
+# Flansible
 ### A super-simple rest api for Ansible
+
+[![Build Status](https://travis-ci.org/ericdong66/flansible.svg?branch=master)](https://travis-ci.org/ericdong66/flansible)
 
 ---
 
@@ -54,6 +57,22 @@ To test the solution with vagrant, you can run `vagrant up` from the root of the
 
 
 you can now interact with the flansible rest api using `http://localhost:3000/api`.
+
+### Usage: docker
+
+for dev:
+
+* vagrant ssh
+* docker-compose  -f docker-compose.yml build
+* docker-compose  -f docker-compose.yml up -d
+* sudo docker exec -it vagrant_flansible_1 bash
+
+
+for prod:
+
+* docker build -t vagrant_flansible .
+* sudo docker run  -idt --name flansible vagrant_flansible
+
 
 ### Usage: General
 Flansible comes with swagger documentation, which can be reached at
@@ -158,22 +177,3 @@ The output from this call should resemble what you see in bash when executing An
 
 ![alt text](http://s33.postimg.org/fq2hivpe7/2016_06_09_03_20_49_Swagger_UI.png "Swagger spec")
 
-
-### how it works in docker
-
-for dev:
-
-vagrant ssh
-
-docker-compose  -f docker-compose.yml build
-
-docker-compose  -f docker-compose.yml up -d
-
-sudo docker exec -it vagrant_flansible_1 bash
-
-
-for prod:
-
-docker build -t vagrant_flansible .
-
-sudo docker run  -idt --name flansible vagrant_flansible
