@@ -14,3 +14,4 @@ lxml==3.7.3
 cssselect==1.0.1
 xmltodict==0.10.2
 pywinrm==0.2.2
+pytest==3.0.7
