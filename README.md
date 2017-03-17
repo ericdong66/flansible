@@ -162,12 +162,18 @@ The output from this call should resemble what you see in bash when executing An
 ### how it works in docker
 
 for dev:
+
 vagrant ssh
+
 docker-compose  -f docker-compose.yml build
+
 docker-compose  -f docker-compose.yml up -d
+
 sudo docker exec -it vagrant_flansible_1 bash
 
 
 for prod:
+
 docker build -t vagrant_flansible .
+
 sudo docker run  -idt --name flansible vagrant_flansible
