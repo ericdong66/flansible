@@ -16,8 +16,8 @@
 
     WSGIDaemonProcess app user=flansible threads=5
 
-    WSGIScriptAlias / /opt/flansible/Flansible/app.wsgi
-    <Directory /opt/flansible/Flansible>
+    WSGIScriptAlias / /home/flansible/Flansible/app.wsgi
+    <Directory /home/flansible/Flansible>
             WSGIProcessGroup app
             WSGIApplicationGroup %{GLOBAL}
             Require all granted
