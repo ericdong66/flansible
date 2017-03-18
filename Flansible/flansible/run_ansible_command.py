@@ -7,6 +7,7 @@ from flansible import api, app, auth, ansible_default_inventory, get_inventory_a
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 import celery_runner
 
+
 class RunAnsibleCommand(Resource):
     @swagger.operation(
         notes='Run ad-hoc Ansible command',
@@ -69,7 +70,7 @@ class RunAnsibleCommand(Resource):
                     spacer = " "
                 else:
                     spacer = ""
-                opt_string = str.format("{0}={1}{2}",key,module_args[key], spacer)
+                opt_string = str.format("{0}={1}{2}", key, module_args[key], spacer)
                 module_args_string += opt_string
                 counter += 1
             module_args_string += '"'
@@ -82,14 +83,14 @@ class RunAnsibleCommand(Resource):
                     spacer = " "
                 else:
                     spacer = ""
-                opt_string = str.format("{0}={1}{2}",key,extra_vars[key], spacer)
+                opt_string = str.format("{0}={1}{2}", key, extra_vars[key], spacer)
                 extra_vars_string += opt_string
                 counter += 1
             extra_vars_string += '"'
         
         if not inventory:
             inventory = ansible_default_inventory
-            has_inv_access =  get_inventory_access(curr_user,  inventory)
+            has_inv_access = get_inventory_access(curr_user, inventory)
             if not has_inv_access:
                 resp = app.make_response((str.format("User does not have access to inventory {0}", inventory), 403))
                 return resp
@@ -124,9 +125,18 @@ class RunAnsibleCommand(Resource):
         else:
             become_user_string = ''
 
-
-        command = str.format("ansible {9} -m {0} {1} {2} {3}{4}{5}{6}{7}{8}", req_module, module_args_string, fork_string, verb_string, 
-                             become_string, become_method_string, become_user_string, inventory, extra_vars_string ,host_pattern)
+        command = str.format("ansible {9} -m {0} {1} {2} {3}{4}{5}{6}{7}{8}",
+                             req_module,
+                             module_args_string,
+                             fork_string,
+                             verb_string,
+                             become_string,
+                             become_method_string,
+                             become_user_string,
+                             inventory,
+                             extra_vars_string,
+                             host_pattern
+                             )
         task_result = celery_runner.do_long_running_task.apply_async([command], soft=task_timeout, hard=task_timeout)
         result = {'task_id': task_result.id}
         return result
