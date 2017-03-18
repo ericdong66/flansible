@@ -14,5 +14,5 @@ fi
 
 cd /home/flansible/Flansible
 C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info &> /var/log/celery.log &
-flower --broker=redis://localhost:6379/0 > /var/log/flower.log 2>&1 &
+flower --broker=redis://localhost:6379/0 &> /var/log/flower.log &
 python runserver.py &> /var/log/flansible.log
