@@ -79,7 +79,7 @@ class PostAnsiblePlaybook(Resource):
             return "can not convert string to yaml format", 400
 
         with open(os.path.join(playbook_root, book_name), "w") as F:
-            yaml.dump(valid_data, F, default_flow_style=False)
+            yaml.safe_dump(valid_data, F, default_flow_style=False)
             logger.debug("saved {0} to playbook {1} in dir {2}".format(book_plays, book_name, playbook_root))
 
         return "playbook uploaded", 201
