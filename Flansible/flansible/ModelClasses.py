@@ -5,8 +5,8 @@ from flask_restful import Resource, Api, reqparse, fields, marshal_with
 @swagger.model
 class AnsibleExtraArgsModel:
     resource_fields = {
-        'arg_name' : fields.String,
-        'arg_value' : fields.String,
+        'arg_name': fields.String,
+        'arg_value': fields.String,
         }
 
 @swagger.model
@@ -21,12 +21,13 @@ class AnsibleCommandModel:
         'module_args': fields.List(fields.Nested(AnsibleExtraArgsModel.resource_fields)),
         'extra_vars': fields.List(fields.Nested(AnsibleExtraArgsModel.resource_fields)),
         'inventory': fields.String,
-        'forks' : fields.Integer,
+        'forks': fields.Integer,
         'verbose_level': fields.Integer,
         'become': fields.Boolean,
         'become_method': fields.String,
         'become_user': fields.String,
     }
+
 
 @swagger.model
 @swagger.nested(
@@ -38,10 +39,18 @@ class AnsiblePlaybookModel:
         'playbook': fields.String,
         'inventory': fields.String,
         'extra_vars': fields.Raw,
-        'forks' : fields.Integer,
+        'forks': fields.Integer,
         'verbose_level': fields.Integer,
         'become': fields.Boolean,
         'update_git_repo': fields.Boolean,
+    }
+
+
+@swagger.model
+class PostAnsiblePlaybookModel:
+    resource_fields = {
+        'book_name': fields.String,
+        'book_plays': fields.String,
     }
 
 
