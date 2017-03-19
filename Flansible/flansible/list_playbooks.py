@@ -7,6 +7,9 @@ from flansible import verify_password, get_inventory_access
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 
 import celery_runner
+from logger import get_logger
+
+logger = get_logger('list_playbooks')
 
 class Playbooks(Resource):
     @swagger.operation(
@@ -22,7 +25,7 @@ class Playbooks(Resource):
     @auth.login_required
     def get(self):
         yamlfiles = []
-        print("listing playbooks in " + playbook_root)
+        logger.debug("listing playbooks in {0}".format(playbook_root))
         for root, dirs, files in os.walk(playbook_root):
             for name in files:
                 if name.endswith((".yaml", ".yml")):
@@ -39,8 +42,7 @@ class Playbooks(Resource):
                 pass
             else:
                 returnedfiles.append(fileobj)
-
-        return returnedfiles
+        return returnedfiles, 200
 
 
 api.add_resource(Playbooks, '/api/listplaybooks')
