@@ -12,6 +12,7 @@ def parse_options():
     parser = argparse.ArgumentParser(prog='run_playbook')
     parser.add_argument('-u', '--url', dest='url', default='http://localhost:3000/', help='flansible server url.')
     parser.add_argument('-p', '--playbook', dest='playbook', required=True, help='playbook file name with full path.')
+    parser.add_argument('-i', '--inventory', dest='inventory', help='list of ips as inventory.')
     return parser.parse_args()
 
 
@@ -22,6 +23,7 @@ if __name__ == '__main__':
     args = parse_options()
     client = get_client(args.url)
     book_name = args.playbook
+    inventory = args.inventory
 
     res = client.list_ansible_playbooks()
     if res.status_code == 200:
@@ -35,7 +37,7 @@ if __name__ == '__main__':
     else:
         raise SystemExit('playbook does not exist on server')
 
-    res = client.run_ansible_playbooks(playbook=book_name)
+    res = client.run_ansible_playbooks(playbook=book_name, inventory=inventory)
     if res.status_code != 200:
         raise SystemExit('fail to run playbook')
 
