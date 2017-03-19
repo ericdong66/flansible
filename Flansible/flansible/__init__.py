@@ -92,3 +92,4 @@ import flansible.ansible_task_status
 import flansible.git
 import flansible.list_playbooks
 import flansible.post_ansible_playbook
+import flansible.download_logs
