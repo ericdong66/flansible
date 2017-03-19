@@ -1,35 +1,41 @@
-from flask_restful import Resource, Api
+from flask_restful import Resource
 from flask_restful_swagger import swagger
-from flansible import app
 from flansible import api, app, celery, auth
-from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 import celery_runner
+
 
 class AnsibleTaskStatus(Resource):
     @swagger.operation(
-    notes='Get the status of an Ansible task/job',
-    nickname='ansibletaskstatus',
-    parameters=[
-        {
-        "name": "task_id",
-        "description": "The ID of the task/job to get status for",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": 'string',
-        "paramType": "path"
-        }
-    ])
+        notes='Get the status of an Ansible task/job',
+        nickname='ansibletaskstatus',
+        parameters=[
+            {
+                "name": "task_id",
+                "description": "The ID of the task/job to get status for",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": 'string',
+                "paramType": "path"
+            }
+        ])
     @auth.login_required
     def get(self, task_id):
-        task = celery_runner.do_long_running_task.AsyncResult(task_id)
+        try:
+            task = celery_runner.do_long_running_task.AsyncResult(task_id)
+        except Exception as e:
+            return {
+                'Status': "ERROR",
+                'description': e.message,
+                'returncode': None
+            }, 404
         if task.state == 'PENDING':
-            result = "Task not found"
-            resp = app.make_response((result, 404))
-            return resp
+            result_obj = {'Status': "PENDING",
+                          'description': "Task not found",
+                          'returncode': None}
         elif task.state == 'PROGRESS':
             result_obj = {'Status': "PROGRESS",
-                              'description': "Task is currently running",
-                              'returncode': None}
+                          'description': "Task is currently running",
+                          'returncode': None}
         else:
             try:
                 return_code = task.info['returncode']
@@ -44,6 +50,6 @@ class AnsibleTaskStatus(Resource):
             except Exception as e:
                 result_obj = {'Status': "CELERY_FAILURE: %s" % str(e)}
 
-        return result_obj
+        return result_obj, 200
 
 api.add_resource(AnsibleTaskStatus, '/api/ansibletaskstatus/<string:task_id>')
