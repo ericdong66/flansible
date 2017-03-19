@@ -127,3 +127,7 @@ class FlansibleClient(object):
             return {"Output": "no result after {0} second".format(timeout)}
 
         return self.get_ansible_task_output(task_id=task_id)
+
+    def download_logs(self):
+        api = "/api/download-logs"
+        return self._do_request(method='GET', api=api)
