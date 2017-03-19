@@ -84,4 +84,4 @@ class PostAnsiblePlaybook(Resource):
 
         return "playbook uploaded", 201
 
-api.add_resource(PostAnsiblePlaybook, '/api/post_ansible_playbook')
+api.add_resource(PostAnsiblePlaybook, '/api/post-ansible-playbook')

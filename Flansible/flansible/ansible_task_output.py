@@ -5,36 +5,46 @@ from flansible import api, app, celery, auth
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 import celery_runner
 
+
 class AnsibleTaskOutput(Resource):
     @swagger.operation(
-    notes='Get the output of an Ansible task/job',
-    nickname='ansibletaskoutput',
-    parameters=[
-        {
-        "name": "task_id",
-        "description": "The ID of the task/job to get status for",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": 'string',
-        "paramType": "path"
-        }
-    ])
+        notes='Get the output of an Ansible task/job',
+        nickname='ansibletaskoutput',
+        parameters=[
+            {
+                "name": "task_id",
+                "description": "The ID of the task/job to get status for",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": 'string',
+                "paramType": "path"
+            }
+        ])
     @auth.login_required
     def get(self, task_id):
-        task = celery_runner.do_long_running_task.AsyncResult(task_id)
+        try:
+            task = celery_runner.do_long_running_task.AsyncResult(task_id)
+        except Exception as e:
+            return {
+                'Status': "ERROR",
+                'description': e.message,
+                'returncode': 1
+            }, 404
         if task.state == 'PENDING':
-            result = "Task not found"
-            resp = app.make_response((result, 404))
-            return resp
-        if task.state == "PROGRESS":
-            result = task.info['output']
+            result_obj = {'Status': "PENDING",
+                          'description': "Task not found",
+                          'output': None,
+                          'returncode': None}
+        elif task.state == "PROGRESS":
+            result_obj = {'Status': "PROGRESS",
+                          'description': "Task not found",
+                          'output': task.info['output'],
+                          'returncode': None}
         else:
-            result = task.info['output']
-        #result_out = task.info.replace('\n', "<br>")
-        #result = result.replace('\n', '<br>')
-        #return result, 200, {'Content-Type': 'text/html; charset=utf-8'}
-        resp = app.make_response((result, 200))
-        resp.headers['content-type'] = 'text/plain'
-        return resp
+            result_obj = {'Status': "SUCCESS",
+                          'description': "Task not found",
+                          'output': task.info['output'],
+                          'returncode': 0}
+        return result_obj, 200
 
 api.add_resource(AnsibleTaskOutput, '/api/ansibletaskoutput/<string:task_id>')
