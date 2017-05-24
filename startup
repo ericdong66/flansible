@@ -13,7 +13,7 @@ if [[ "${site_yml}" ]]
 fi
 
 cd /home/flansible/Flansible
-C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info &> /var/log/celery.log &
-flower --broker=redis://localhost:6379/0 &> /var/log/flower.log &
-python runserver.py &> /var/log/flansible.log &
+C_FORCE_ROOT=1 celery worker -A flansible.celery --loglevel=info &> ${flansible_home}/celery.log &
+flower --broker=redis://localhost:6379/0 &> ${flansible_home}/flower.log &
+python runserver.py &> ${flansible_home}/flansible.log &
 tail -f /var/log/flansible.log
