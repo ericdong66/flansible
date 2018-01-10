@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name='flansible',
-    version="0.1.0",
+    version="0.2.0",
     license="MIT",
     description='super-duper-simple rest api for ansible tasks',
     packages=['Flansible',
