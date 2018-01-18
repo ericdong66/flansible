@@ -6,7 +6,7 @@ flask-restful-swagger==0.19
 flower==0.9.1
 redis==2.10.5
 scp==0.10.2
-paramiko==1.18.0
+paramiko==2.4.0
 PyYAML==3.10
 httplib2==0.8
 requests==2.13.0

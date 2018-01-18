@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name='flansible',
-    version="0.2.0",
+    version="0.3.0",
     license="MIT",
     description='super-duper-simple rest api for ansible tasks',
     packages=['Flansible',
@@ -32,7 +32,7 @@ setuptools.setup(
         'flower==0.9.1',
         'redis==2.10.5',
         'scp==0.10.2',
-        'paramiko==1.10.1',
+        'paramiko==2.4.0',
         'PyYAML==3.10',
         'httplib2==0.8',
         'requests==2.13.0',
